@@ -1,11 +1,17 @@
 import PySimpleGUI as sg
 import requests
+import magic
 
 def upload_file(path: str):
 
     with open(path, "rb") as file:
         to_upload = {"file": file}
-        response = requests.post(url="http://0.0.0.0:3000/file_scan", files=to_upload)
+        file_type = magic.from_file(path)
+        print(file_type)
+
+        headers = {"file_type": file_type}
+
+        response = requests.post(url="http://0.0.0.0:3000/file_scan", files=to_upload, headers=headers)
 
         print(response.text)
 

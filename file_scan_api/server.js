@@ -22,7 +22,17 @@ app.post('/file_scan', function(req, res, next){
       hashSum.update(file.content);
       const hex = hashSum.digest('hex');
 
-      console.log(hex);
+      let timestamp = Date.now();
+
+      doc = {
+        h: hex,
+        fs: file.size,
+        ft: req.headers.file_type,
+        v: 'clean',
+        s: timestamp
+      }
+
+      console.log(doc);
 
       res.send(format('\nuploaded %s (%d Kb)'
         , file.filename
