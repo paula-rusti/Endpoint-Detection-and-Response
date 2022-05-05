@@ -2,11 +2,12 @@ import PySimpleGUI as sg
 import requests
 
 def upload_file(path: str):
-    file = open(path, "rb")
-    to_upload = {"file": file}
-    response = requests.post(url="localhost:20000/upload", files=to_upload)
 
-    print(response.text)
+    with open(path, "rb") as file:
+        to_upload = {"file": file}
+        response = requests.post(url="http://0.0.0.0:3000/file_scan", files=to_upload)
+
+        print(response.text)
 
 def device_status():
     response = requests.get(url="localhost:20000/status", params={"deviceid": "aaa"})

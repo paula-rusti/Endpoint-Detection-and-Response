@@ -1,5 +1,7 @@
 const express = require('express')
 const multiparty = require('multiparty');
+const crypto = require('crypto');
+
 const format = require('util').format;
 const app = express()
 const port = 3000
@@ -15,6 +17,13 @@ app.post('/file_scan', function(req, res, next){
   
     form.on('error', next);
     form.on('close', function(){
+
+      const hashSum = crypto.createHash('md5');
+      hashSum.update(file.content);
+      const hex = hashSum.digest('hex');
+
+      console.log(hex);
+
       res.send(format('\nuploaded %s (%d Kb)'
         , file.filename
         , file.size / 1024 | 0));
