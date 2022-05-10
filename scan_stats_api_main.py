@@ -8,9 +8,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 app = FastAPI()
 
-# redis
 redis_client = aioredis.from_url(os.getenv("REDIS_URL", "redis://localhost"))
-# mongo
+
 mongo_client = AsyncIOMotorClient(os.getenv("MONGO_URL", "mongodb://localhost:27017"))
 db = mongo_client.project_db
 scan_stats_collection = db["scan_statistics"]
@@ -21,7 +20,7 @@ async def scans_overview():
     date_now = datetime.now().strftime("%Y-%m-%d")
     document = await scan_stats_collection.find_one({"date": date_now})
     document.pop("_id", None)
-    # insert into redis
+    # todo insert into redis
     return document
 
 
@@ -29,7 +28,7 @@ async def scans_overview():
 async def scans_overview_by_date(date: str):
     if date == "":
         raise HTTPException(status_code=400, detail="Bad request")
-    document = await scan_stats_collection.find_one({"date": date})
+    document = await scan_stats_collection.find_one({"date": date}) # take from redis instead
     document.pop("_id", None)
     return document
 

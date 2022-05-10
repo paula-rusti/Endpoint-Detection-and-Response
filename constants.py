@@ -1,0 +1,1 @@
+VERDICTS = ["clean", "infected", "PUA"]

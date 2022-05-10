@@ -4,8 +4,8 @@ DP Architecture:
 Scan Engine  => the PUBLISHER
     -> gives a verdict to a file based on a dummy logic  
     -> file hash (md5) % 3 ({0 -> clean, 1 -> malware, 2 -> PUA}) 
-    -> scan results documents (JSON) will be stored in a mongo db -> this is the db #1
-        -> format_db_1:
+    -> scan results documents (JSON) will be stored in a mongo db -> this is the db collection #1
+        -> format_col_1:
         {
             hash: string (file hash)   ==> mongo identifier in this case
             dev_id: string (device id, uniquely identifying a device)
@@ -26,8 +26,7 @@ Scan Engine  => the PUBLISHER
                 md5 key not present ==> it means that this is the first time we see this file => dummy logic triggers and a verdict is obtained => then a mongo document is created 
                                         => also a redis key-value pair is inserted
         -> when a GET request is sent (we want the verdict for a specific file hash), the following steps will be triggered:
-            -> first we query redis for the file hash key -> if present we return the document from mongo (we know it's there)
-                                                          -> if not, we tell the user to upload the file first and come back later :)
+            -> only query mongo cuz the keys from redis expire (LRU cache, eviction policy?)
         --------
     -> finally the scan results (mongo docs) will be continuously posted to the queue and from here the subscriber (Scans Stats) will consume them
 
@@ -35,7 +34,8 @@ Scan Engine  => the PUBLISHER
         -> the user uploads a file and receives a verdict regarding the malicious state of the file
         -> will have 1 route (/scan) and accept 2 types of requests here (GET & POST):
             -> POST /scan: submit a file for scanning
-            -> GET /scan: retrieve a scan result
+            -> GET /scan/{md5}: retrieve a scan result for a given md5 (must have been previously scanned)
+
 
 Scans Stats => the SUBSCRIBER
     -> no interaction with the client
@@ -43,11 +43,11 @@ Scans Stats => the SUBSCRIBER
     -> computes and stores in db: 
         -> total infected and clean scans
         -> unique file (hashes) scans
-    -> those statistics are continuously written to the overview document
+    -> those statistics are continuously(1 hour refresh rate for example?) written to the overview document
     
     -----------------------
-    -> here we have another mongo, db #2 => holds device scans overview data
-        -> format_db_2:
+    -> here we have another mongo collection => holds device scans overview data
+        -> format_col_2:
         {
             dev_id: string (device id, uniquely identifying a device)
             u_s: int (unique scans, any verdict)
@@ -55,15 +55,16 @@ Scans Stats => the SUBSCRIBER
             u_c: int (unique clean)
         }
     -> the Scan Stats Worker consumes data from the queue (docs in format_db_1) and populates db 2 (with its redis included)
-    -> redis #2 format: -> maybe sth like this: 3 keys corresponding to the same device
+    -> redis #2 format (1 single shared redis): -> maybe sth like this: 3 keys corresponding to the same device
         {dev_id}_1 -> u_s
-        {dev_id}_1 -> u_i
-        {dev_id}_1 -> u_c
-        fiecare key sa fie un bloom filter de fapt
+        {dev_id}_2 -> u_i
+        {dev_id}_3 -> u_c
+        fiecare key sa fie un bloom filter sau un hyperloglog de fapt
 
     2. Scans API
-        -> only exposes /overview (GET)
+        -> only exposes /overview/{dev_id} (GET)
             -> here the user can request the scans status of a given device (by giving it the device id)
             -> then a mongo document will coresponding to that device will be returned
-            
+        -> maybe can also expose /overview (GET)
+            -> the same statistics but not unique and not per device (just some simple counts to be computed)
     
