@@ -1,0 +1,8 @@
+FROM python:3.8-slim-bullseye
+
+WORKDIR /app
+ADD . .
+
+RUN pip install -r requirements.txt
+
+CMD python file_scan_api_main.py
