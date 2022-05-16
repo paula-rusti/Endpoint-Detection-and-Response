@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scan file</title>
+    <link rel="stylesheet" href="scanFileWindow.css">
+</head>
+
+<body>
+    <div class="center_div">
+        <form action="fileupload" method="post" enctype="multipart/form-data">
+            <div>
+                <label>Scan file:</label>
+                <input type="file" id="file_input" autofocus>
+            </div>
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+            <div>
+                <button type="button" id="cancel_button">Cancel</button>
+            </div>
+            
+        </form>
+        <div>
+            <h1>File status...</h1>
+        </div>
+    </div>
+
+    <script src="scanFileWindow.js"></script>
+</body>
+</html>
