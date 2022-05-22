@@ -1,5 +1,6 @@
 const electron = require('electron');
 const path = require('path');
+const os = require('os');
 
 // we need ipcRenderer to communicate with main process
 const {ipcRenderer} = electron;
@@ -14,3 +15,13 @@ const statusButton = document.getElementById('device_status_button');
 statusButton.addEventListener('click', event => {
     ipcRenderer.send('main:status');
 });
+
+// update device info elements
+const platformHeader = document.getElementById('platform_header');
+platformHeader.textContent = 'Platform: ' + os.platform();
+
+const architectureHeader = document.getElementById('architecture_header');
+architectureHeader.textContent = 'Architecture: ' + os.arch();
+
+const versionHeader = document.getElementById('version_header');
+versionHeader.textContent = 'Version: ' + os.version();

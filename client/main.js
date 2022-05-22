@@ -3,6 +3,7 @@ const url = require('url');
 const path = require('path');
 const { MenuItem } = require('electron');
 
+
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 
 let mainWindow;
@@ -11,6 +12,8 @@ app.on('ready', function(){
 
     // create window
     mainWindow = new BrowserWindow({
+        width: 700,
+        height: 600,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
@@ -40,7 +43,7 @@ app.on('ready', function(){
 function createScanFileWindow(){
     // create window
     scanFileWindow = new BrowserWindow({
-        width: 400,
+        width: 500,
         height: 400,
         title: 'Scan file',
         webPreferences: {
