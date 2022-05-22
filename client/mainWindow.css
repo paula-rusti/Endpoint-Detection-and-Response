@@ -1,5 +1,24 @@
 body {
-    background-image: url('res/background_700x700.jpg');
+    background-image: url('res/background_700x600.jpg');
+}
+
+#wrapper_title {
+    width: 90%;
+    /* border: 1px solid black; */
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+#title_left {
+    width: 50%;
+    float:left; /* add this */
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: right;
+}
+#title_right {
+    /* border: 1px solid green; */
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+    display: flex;
+    justify-content: left;
 }
 
 .center_div {
@@ -17,55 +36,86 @@ body {
 
 #wrapper_buttons {
     width: 90%;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     overflow: hidden; /* will contain if #first is longer than #second */
 }
 #first_button {
     width: 50%;
     float:left; /* add this */
-    border: 1px solid red;
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: center;
 }
 #second_button {
-    border: 1px solid green;
+    /* border: 1px solid green; */
+    display: flex;
+    justify-content: center;
     overflow: hidden; /* if you don't want #second to wrap below #first */
 }
 
 #wrapper_info {
     width: 90%;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     overflow: hidden; /* will contain if #first is longer than #second */
 }
 #device_info {
     width: 50%;
     float:left; /* add this */
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 #device_status {
-    border: 1px solid green;
+    /* border: 1px solid green; */
     overflow: hidden; /* if you don't want #second to wrap below #first */
 }
 
 .myButton {
-	box-shadow: 3px 4px 0px 0px #1564ad;
-	background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
-	background-color:#79bbff;
-	border-radius:5px;
-	border:1px solid #337bc4;
+	box-shadow:inset 0px 34px 0px -15px #b54b3a;
+	background-color:#a73f2d;
+	border:1px solid #241d13;
 	display:inline-block;
 	cursor:pointer;
 	color:#ffffff;
 	font-family:Arial;
-	font-size:17px;
+	font-size:15px;
 	font-weight:bold;
-	padding:12px 44px;
+	padding:9px 23px;
 	text-decoration:none;
-	text-shadow:0px 1px 0px #528ecc;
+	text-shadow:0px -1px 0px #7a2a1d;
 }
 .myButton:hover {
-	background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
-	background-color:#378de5;
+	background-color:#b34332;
 }
 .myButton:active {
 	position:relative;
 	top:1px;
 }
+
+.wordart {
+    font-family: Arial, sans-serif;
+    font-size: 4em;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .wordart.radial .text {
+      background: #fffa28;
+      background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…BoZWlnaHQ9IjEwMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+      background: -moz-radial-gradient(center, ellipse cover, #fffa28 0%, #ec8a39 100%);
+      background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #fffa28), color-stop(100%, #ec8a39));
+      background: -webkit-radial-gradient(center, ellipse cover, #fffa28 0%, #ec8a39 100%);
+      background: -o-radial-gradient(center, ellipse cover, #fffa28 0%, #ec8a39 100%);
+      background: -ms-radial-gradient(center, ellipse cover, #fffa28 0%, #ec8a39 100%);
+      background: radial-gradient(ellipse at center, #fffa28 0%, #ec8a39 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffa28', endColorstr='#ec8a39', GradientType=1);
+      font-family: Impact, sans-serif;
+      font-weight: bold;
+  }
+  
+  

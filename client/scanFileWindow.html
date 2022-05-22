@@ -7,16 +7,18 @@
 
 <body>
     <div class="center_div">
-        <form action="fileupload" method="post" enctype="multipart/form-data">
-            <div>
+        <form action="fileupload" method="post" enctype="multipart/form-data" style="margin: 20px; padding: 20px;">
+            <div id="input_div">
                 <label>Scan file:</label>
                 <input type="file" id="file_input" autofocus>
             </div>
-            <div>
-                <button type="submit" class="myButton">Submit</button>
-            </div>
-            <div>
-                <button type="button" class="myButton" id="cancel_button">Cancel</button>
+            <div id="button_wrapper">
+                <div id="first_button">
+                    <button type="submit" class="myButton">Submit</button>
+                </div>
+                <div id="second_button">
+                    <button type="button" class="myButton" id="cancel_button">Cancel</button>
+                </div>
             </div>
             
         </form>
