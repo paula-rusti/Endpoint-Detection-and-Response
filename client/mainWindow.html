@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EDR Client</title>
+    <link rel="stylesheet" href="mainWindow.css">
+</head>
+
+<body>
+    <div class="center_div">
+
+        <div id="wrapper_title">
+            <div id="title_left">
+                <div class="wordart radial"><span class="text">EDR</span></div>        
+            </div>
+            <div id="title_right">
+                <img src="res/shield.png" alt="Logo" width="80" height="80"> 
+            </div>
+        </div>
+
+        <div id="wrapper_buttons">
+            <div id="first_button">
+                <button type="button" class="myButton" id="scan_file_button">Scan file</button>
+            </div>
+            <div id="second_button">
+                <button type="button" class="myButton" id="device_status_button">Device status</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="center_div">
+        <div id="wrapper_info">
+            <div id="device_info">
+                <h1>DEVICE INFO</h1>
+                <h2 id="platform_header">Platform: Loading...</h2>
+                <h2 id="architecture_header">Architecture: Loading...</h2>
+                <h2 id="version_header">Version: Loading...</h2>
+            </div>
+            <div id="device_status">
+                <h1>DEVICE STATUS HERE</h1>
+                <img src="res/clean.png" alt="Clean" width="200" height="150"> 
+            </div>
+        </div>
+       
+    </div>
+    <script src="mainWindow.js"></script>
+</body>
+</html>

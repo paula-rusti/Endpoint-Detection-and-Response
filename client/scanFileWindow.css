@@ -1,0 +1,88 @@
+body {
+    background-image: url('res/scan_background_500x400.jpg');
+}
+
+.center_div {
+    margin: 20px;
+    width: 80%;
+    /* border: 5px solid #fff; */
+    padding: 20px;
+}
+
+#file_text_div {
+    display: flex;
+    justify-content: center;
+}
+
+#file_text_header {
+    color: black;
+}
+
+#input_div {
+    display: flex;
+    justify-content: center;
+    border: 20px;
+    margin-bottom: 20px;
+}
+
+#wrapper_buttons {
+    width: 90%;
+    /* border: 1px solid black; */
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+#first_button {
+    width: 50%;
+    float:left; /* add this */
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: center;
+}
+#second_button {
+    /* border: 1px solid green; */
+    display: flex;
+    justify-content: center;
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+}
+
+
+#result_wrapper {
+    width: 90%;
+    /* border: 1px solid black; */
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+#result_left {
+    width: 50%;
+    float:left; /* add this */
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: center;
+}
+#result_right {
+    /* border: 1px solid green; */
+    display: flex;
+    justify-content: center;
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+}
+
+.myButton {
+	box-shadow:inset 0px 34px 0px -15px #b54b3a;
+	background-color:#a73f2d;
+	border:1px solid #241d13;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:9px 23px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #7a2a1d;
+}
+.myButton:hover {
+	background-color:#b34332;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
