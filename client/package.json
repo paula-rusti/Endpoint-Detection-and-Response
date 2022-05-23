@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "crypto": "^1.0.1",
     "electron": "^18.2.3",
     "http": "^0.0.1-security"
   }

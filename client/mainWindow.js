@@ -1,5 +1,4 @@
 const electron = require('electron');
-const path = require('path');
 const os = require('os');
 
 // we need ipcRenderer to communicate with main process
@@ -13,7 +12,9 @@ scanButton.addEventListener('click', event => {
 
 const statusButton = document.getElementById('device_status_button');
 statusButton.addEventListener('click', event => {
-    ipcRenderer.send('main:status');
+    console.log('STATUS PRESSED');
+
+    // make request here
 });
 
 // update device info elements

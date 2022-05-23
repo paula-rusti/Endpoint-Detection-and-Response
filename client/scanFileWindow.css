@@ -9,10 +9,20 @@ body {
     padding: 20px;
 }
 
+#file_text_div {
+    display: flex;
+    justify-content: center;
+}
+
+#file_text_header {
+    color: black;
+}
+
 #input_div {
     display: flex;
     justify-content: center;
     border: 20px;
+    margin-bottom: 20px;
 }
 
 #wrapper_buttons {

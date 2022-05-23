@@ -78,9 +78,3 @@ ipcMain.on('main:scan', event => {
 ipcMain.on('scan:cancel', event => {
     scanFileWindow.close();
 })
-
-// catch device status button click event
-ipcMain.on('main:status', event => {
-    console.log('status pressed');
-    // send get request here with device status
-})
