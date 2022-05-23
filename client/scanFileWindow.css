@@ -34,6 +34,26 @@ body {
     overflow: hidden; /* if you don't want #second to wrap below #first */
 }
 
+
+#result_wrapper {
+    width: 90%;
+    /* border: 1px solid black; */
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+#result_left {
+    width: 50%;
+    float:left; /* add this */
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: center;
+}
+#result_right {
+    /* border: 1px solid green; */
+    display: flex;
+    justify-content: center;
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+}
+
 .myButton {
 	box-shadow:inset 0px 34px 0px -15px #b54b3a;
 	background-color:#a73f2d;
