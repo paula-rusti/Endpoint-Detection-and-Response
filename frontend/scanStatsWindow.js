@@ -33,8 +33,8 @@ overviewTodayButton.addEventListener('click', event => {
     .then(function (response) {
         // handle success
         console.log(response);
-        cleanHeader.textContent = response.clean_count;
-        infectedHeader.textContent = response.infected_count;
+        cleanHeader.textContent = response.data.clean_count;
+        infectedHeader.textContent = response.data.infected_count;
     })
     .catch(function (error) {
         // handle error
@@ -62,8 +62,8 @@ overviewDateButton.addEventListener('click', event => {
         .then(function (response) {
             // handle success
             console.log(response);
-            cleanHeader.textContent = response.clean_count;
-            infectedHeader.textContent = response.infected_count;
+            cleanHeader.textContent = response.data.clean_count;
+            infectedHeader.textContent = response.data.infected_count;
         })
         .catch(function (error) {
             // handle error

@@ -8,7 +8,7 @@ const {ipcRenderer} = electron;
 
 //here mainly the buttons will be configured
 // axios config
-axios.defaults.baseURL = 'http://localhost:8005';
+axios.defaults.baseURL = 'http://localhost:8100';
 
 // get buttons and send click events to main process
 const scanButton = document.getElementById('scan_file_button');
@@ -27,15 +27,15 @@ statusButton.addEventListener('click', event => {
     console.log('STATUS PRESSED');
 
     //make request here
-    axios.get(`/status`)
+    axios.get(`/device_status/${os.hostname()}`)
     .then(function (response) {
         // handle success
         console.log(response);
         let result_header = document.getElementById('device_status_header');
-        result_header.textContent = response.verdict;
+        result_header.textContent = response.data.status;
 
         let result_img = document.getElementById('result_img');
-        if (response.verdict == 'clean'){
+        if (response.data.status == 'clean'){
             result_img.src = "res/clean.png";
         } else {
             result_img.src = "res/infected.png";

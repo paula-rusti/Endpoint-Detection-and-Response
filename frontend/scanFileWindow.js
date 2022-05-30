@@ -91,10 +91,10 @@ submitButton.addEventListener('click', event => {
 
             // update displayed info
             let result_header = document.getElementById('result_header');
-            result_header.textContent = response.verdict;
+            result_header.textContent = response.data.verdict;
 
             let result_img = document.getElementById('result_img');
-            if (response.verdict == 'clean'){
+            if (response.data.verdict == 'clean'){
                 result_img.src = "res/clean.png";
             } else {
                 result_img.src = "res/infected.png";
