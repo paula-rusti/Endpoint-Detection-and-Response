@@ -15,27 +15,35 @@ app = FastAPI()
 
 redis_client = aioredis.from_url(os.getenv("REDIS_URL", "redis://localhost"))
 
-mongo_client = AsyncIOMotorClient(os.getenv("MONGO_URL", "mongodb://localhost:27017"))      # connect to local mongo instance
-db = mongo_client["project_db"]         # 1 single db
-files_scan_collection = db["files_scan_collection"]  # 2 collection, 1 for scan engine and the other for scan stats
+mongo_client = AsyncIOMotorClient(
+    os.getenv("MONGO_URL", "mongodb://localhost:27017")
+)  # connect to local mongo instance
+db = mongo_client["project_db"]  # 1 single db
+files_scan_collection = db[
+    "files_scan_collection"
+]  # 2 collection, 1 for scan engine and the other for scan stats
 
 scans_exchange_name = "scans"
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=os.getenv("RABBIT_URL", "localhost")))
-channel = connection.channel()
-channel.exchange_declare(exchange=scans_exchange_name, exchange_type="fanout")
 
 
 @app.post("/scan")
 async def post_scan(file: bytes = File(...), device_id: str = Body(...)):
     # add device_id to request body (maybe the ui will read some device specific info and embed it to the request )
-    """ Scans a malicious file and saves result to database """
+    """Scans a malicious file and saves result to database"""
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host=os.getenv("RABBIT_URL", "localhost"))
+    )
+    channel = connection.channel()
+    channel.exchange_declare(exchange=scans_exchange_name, exchange_type="fanout")
 
     # compute file hash & sum & verdict
     md5_hash = hashlib.md5(file)
     file_hexdigest = md5_hash.hexdigest()
 
     # check cache
-    cached_value = await redis_client.get(file_hexdigest)       # redis format: file_hash: {file_hash: value, verdict: value}
+    cached_value = await redis_client.get(
+        file_hexdigest
+    )  # redis format: file_hash: {file_hash: value, verdict: value}
     if cached_value:
         print(f"serving {file_hexdigest} from cache")
         # if the file was previously scanned (thus we were able to answer from cache) => we cand just forward the scan result (mongo doc) to rabbit so it will be further consumed by the worker
@@ -44,7 +52,7 @@ async def post_scan(file: bytes = File(...), device_id: str = Body(...)):
             routing_key="",
             body=cached_value,
         )
-        return json.loads(cached_value)     # return the scan result
+        return json.loads(cached_value)  # return the scan result
 
     # else we have to trigger the dummy logic on the current file
     file_sum = sum(hashlib.md5(file).digest())
@@ -55,7 +63,9 @@ async def post_scan(file: bytes = File(...), device_id: str = Body(...)):
         result = await files_scan_collection.insert_one(
             {"_id": file_hexdigest, "verdict": file_verdict, "dev_id": device_id}
         )
-        if not result.acknowledged:     # if we were unable to save the data to mongo and data was lost
+        if (
+            not result.acknowledged
+        ):  # if we were unable to save the data to mongo and data was lost
             print("failed to save file with hash", file_hexdigest)
             raise HTTPException(status_code=500, detail="Operation failed")
     except DuplicateKeyError as e:
@@ -77,10 +87,12 @@ async def post_scan(file: bytes = File(...), device_id: str = Body(...)):
 
 @app.get("/scan/{md5}")
 async def get_scan(md5: str):
-    """ Gets previous scan result from database """
+    """Gets previous scan result from database"""
     if not md5 or md5 == "":
         raise HTTPException(status_code=400, detail="Bad md5!")
-    result = await files_scan_collection.find_one({"_id": md5}) # look in mongo instead of redis bcs the keys expire there :( (LRU cache)
+    result = await files_scan_collection.find_one(
+        {"_id": md5}
+    )  # look in mongo instead of redis bcs the keys expire there :( (LRU cache)
     if result is None:
         raise HTTPException(status_code=404, detail="Not found!")
 
