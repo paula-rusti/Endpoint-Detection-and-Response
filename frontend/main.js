@@ -13,7 +13,7 @@ app.on('ready', function(){
     // create window
     mainWindow = new BrowserWindow({
         width: 700,
-        height: 550,
+        height: 500,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
