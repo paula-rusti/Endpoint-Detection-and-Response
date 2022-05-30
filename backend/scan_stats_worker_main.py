@@ -9,13 +9,17 @@ import redis
 
 def listen_for_scan_messages():
     # redis
-    redis_client = redis.Redis(host=os.getenv("REDIS_HOST", "localhost"), port=6379, db=0)
+    redis_client = redis.Redis(
+        host=os.getenv("REDIS_HOST", "localhost"), port=6379, db=0
+    )
     # mongo
     mongo_client = MongoClient(os.getenv("MONGO_URL", "mongodb://localhost:27017"))
     db = mongo_client["project_db"]
     scan_stats_collection = db["scan_statistics"]
     # rabbit
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=os.getenv("RABBIT_URL", "localhost")))
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host=os.getenv("RABBIT_URL", "localhost"))
+    )
     channel = connection.channel()
 
     channel.exchange_declare(exchange="scans", exchange_type="fanout")
@@ -37,7 +41,7 @@ def listen_for_scan_messages():
             overview_document = {
                 "date": date_now,
                 "infected_count": 0,
-                "clean_count": 0
+                "clean_count": 0,
             }
 
         # count infected/clean docs
@@ -47,9 +51,16 @@ def listen_for_scan_messages():
         elif scan_verdict == "clean":
             overview_document["clean_count"] += 1
 
-        scan_stats_collection.update_one({"date": date_now},
-                                         {"$set": {"infected_count": overview_document["infected_count"],
-                                                   "clean_count": overview_document["clean_count"]}}, upsert=True)
+        scan_stats_collection.update_one(
+            {"date": date_now},
+            {
+                "$set": {
+                    "infected_count": overview_document["infected_count"],
+                    "clean_count": overview_document["clean_count"],
+                }
+            },
+            upsert=True,
+        )
         print(overview_document)
         print(" [x] %r" % scan_body)
         redis_client.execute_command("BF.ADD", "scans_filter", scan_body["file_hash"])

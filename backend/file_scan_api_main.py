@@ -99,5 +99,18 @@ async def get_scan(md5: str):
     return result
 
 
+@app.get("/device_status/{device_id}")
+async def get_device_status(device_id: str):
+    if not device_id or device_id == "":
+        raise HTTPException(status_code=400, detail="Bad device_id!")
+    result = await files_scan_collection.find_one(
+        {"dev_id": device_id, "verdict": "infected"}
+    )  # look in mongo instead of redis bcs the keys expire there :( (LRU cache)
+    if result is None:
+        return {"status": "clean"}
+    else:
+        return {"status": "infected"}
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8100)
