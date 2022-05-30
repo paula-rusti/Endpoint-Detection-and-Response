@@ -48,7 +48,8 @@ body {
 }
 #second_button {
     /* border: 1px solid green; */
-    display: flex;
+    display:
+            flex;
     float:left;
     justify-content: center;
     overflow: hidden; /* if you don't want #second to wrap below #first */
