@@ -24,6 +24,10 @@ files_scan_collection = db[
 ]  # 2 collection, 1 for scan engine and the other for scan stats
 
 scans_exchange_name = "scans"
+def check_bin_for_problems(md5 : str):
+    if md5 == 0:
+        print("LOG: Files is either empty at all or file has problems")
+        print("Check file")
 
 
 @app.post("/scan")
