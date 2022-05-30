@@ -6,7 +6,8 @@ const axios = require('axios').default;
 // we need ipcRenderer to communicate with main process
 const {ipcRenderer} = electron;
 
-axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.baseURL = 'http://localhost:8100';
+axios.defaults.headers.post['Content-Type'] = 'application/octet-stream';
 
 // get button and send click event to main process
 const cancelButton = document.getElementById('cancel_button');
@@ -58,7 +59,7 @@ submitButton.addEventListener('click', event => {
     else {
         const file = fileInput.files[0];
 
-        let fileBuffer = fs.readFileSync(file.path);
+        let fileBuffer = fs.readFileSync(file.path, {encoding: 'base64'});
         let deviceId = os.hostname();
         console.log("READ FILE:");
         console.log(fileBuffer);
@@ -69,18 +70,24 @@ submitButton.addEventListener('click', event => {
         fileText.textContent = `Name: ${file.name}, Type: ${file.type}, Size: ${file.size} bytes`;
 
         // make request
-        let to_send = {
-            file: fileBuffer,
-            device_id: deviceId
-        }
+
+        const form = new FormData();
+        form.append("file", fileBuffer);
+        form.append('device_id', os.hostname());
+
+        const options = {
+            method: 'POST',
+            url: 'http://localhost:8100/scan',
+            headers: {'Content-Type': 'multipart/form-data'},
+            data: form
+          };
 
         console.log('Sending: ');
-        console.log(to_send);
 
         // make request here
-        axios.post('/scan', to_send)
+        axios.request(options)
           .then(function (response) {
-            console.log(response);
+            console.log(response.data);
 
             // update displayed info
             let result_header = document.getElementById('result_header');
