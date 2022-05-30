@@ -6,6 +6,8 @@ const axios = require('axios').default;
 // we need ipcRenderer to communicate with main process
 const {ipcRenderer} = electron;
 
+axios.defaults.baseURL = '0.0.0.0';
+
 // get button and send click event to main process
 const cancelButton = document.getElementById('cancel_button');
 cancelButton.addEventListener('click', event => {
@@ -40,18 +42,18 @@ submitButton.addEventListener('click', event => {
         console.log(`MD5 IS ${md5}`);
 
         // make request
-        // axios.get(`/scan/${md5}`)
-        // .then(function (response) {
-        //     // handle success
-        //     console.log(response);
-        // })
-        // .catch(function (error) {
-        //     // handle error
-        //     console.log(error);
-        // })
-        // .then(function () {
-        //     // always executed
-        // });
+        axios.get(`/scan/${md5}`)
+        .then(function (response) {
+            // handle success
+            console.log(response);
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
     }
     else {
         const file = fileInput.files[0];
@@ -76,23 +78,23 @@ submitButton.addEventListener('click', event => {
         console.log(to_send);
 
         // make request here
-        // axios.post('/scan', to_send)
-        //   .then(function (response) {
-        //     console.log(response);
+        axios.post('/scan', to_send)
+          .then(function (response) {
+            console.log(response);
 
-        //     // update displayed info
-        //     let result_header = document.getElementById('result_header');
-        //     result_header.textContent = response.verdict;
+            // update displayed info
+            let result_header = document.getElementById('result_header');
+            result_header.textContent = response.verdict;
 
-        //     let result_img = document.getElementById('result_img');
-        //     if (response.verdict == 'clean'){
-        //         result_img.src = "res/clean.png";
-        //     } else {
-        //         result_img.src = "res/infected.png";
-        //     }
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   });
+            let result_img = document.getElementById('result_img');
+            if (response.verdict == 'clean'){
+                result_img.src = "res/clean.png";
+            } else {
+                result_img.src = "res/infected.png";
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     }
 })

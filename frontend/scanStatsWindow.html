@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Stats</title>
+    <link rel="stylesheet" href="scanStatsWindow.css">
+</head>
+
+<body>
+    <div id="center_div">
+        <form action="scanstats" method="post" enctype="multipart/form-data">
+            <div id="date_div">
+                <label>Choose date:</label>
+                <input type="date" id="date_input">
+            </div>
+            <div id="md5_input_div">
+                <label>MD5:</label>
+                <input type="text" id="md5_input" >
+            </div>
+            <div id="error_text_div">
+                <h2 id="error_text_header"></h2>
+            </div>
+            <div id="button_wrapper">
+                <div id="first_button">
+                    <button type="button" class="myButton" id="overview_today_button">Overview for today</button>
+                </div>
+                <div id="second_button">
+                    <button type="button" class="myButton" id="overview_date_button">Overview for date</button>
+                </div>
+                <div id="third_button">
+                    <button type="button" class="myButton" id="file_overview_button">Search file hash</button>
+                </div>
+            </div>
+            
+        </form>
+
+        <div id="result_wrapper">
+           <div id="date_header_div">
+               <h2 id="date_header">Date: </h2>
+           </div>
+           <div id="clean_header_div">
+               <h2 id="clean_count_header">Clean count: </h2>
+           </div>
+           <div id="infected_header_div">
+               <h2 id="infected_count_header">Infected count: </h2>
+           </div>
+        </div>
+        </div>
+    </div>
+    <script src="scanStatsWindow.js"></script>
+</body>
+</html>

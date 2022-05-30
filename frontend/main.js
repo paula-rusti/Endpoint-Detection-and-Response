@@ -12,8 +12,8 @@ app.on('ready', function(){
 
     // create window
     mainWindow = new BrowserWindow({
-        width: 600,
-        height: 500,
+        width: 700,
+        height: 550,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
@@ -69,6 +69,36 @@ function createScanFileWindow(){
     scanFileWindow.show();
 }
 
+// handle scan stats button press
+function createScanStatsWindow(){
+    // create window
+    scanStatsWindow = new BrowserWindow({
+        width: 800,
+        height: 400,
+        title: 'Scan stats',
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+
+    // load html
+    scanStatsWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'scanStatsWindow.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+
+    // garbage collection
+    scanStatsWindow.on('close', () => {
+        scanStatsWindow = null;
+    })
+
+    scanStatsWindow.webContents.openDevTools();
+
+    scanStatsWindow.show();
+}
+
 // catch scan button click event
 ipcMain.on('main:scan', event => {
     createScanFileWindow();
@@ -77,4 +107,9 @@ ipcMain.on('main:scan', event => {
 // catch scan window cancel click event
 ipcMain.on('scan:cancel', event => {
     scanFileWindow.close();
+})
+
+// catch scan stats window button click event
+ipcMain.on('main:stats', event => {
+    createScanStatsWindow();
 })

@@ -49,9 +49,17 @@ body {
 #second_button {
     /* border: 1px solid green; */
     display: flex;
+    float:left;
     justify-content: center;
     overflow: hidden; /* if you don't want #second to wrap below #first */
 }
+#third_button {
+    /* border: 1px solid green; */
+    display: flex;
+    justify-content: center;
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+}
+
 
 #wrapper_info {
     width: 90%;
