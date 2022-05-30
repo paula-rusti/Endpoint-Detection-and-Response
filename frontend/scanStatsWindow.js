@@ -1,6 +1,6 @@
 const axios = require('axios').default;
 
-axios.defaults.baseURL = 'http://localhost:8005';
+axios.defaults.baseURL = 'http://167.71.50.215:8005';
 
 // get html elements
 const overviewTodayButton = document.getElementById('overview_today_button');
@@ -33,8 +33,8 @@ overviewTodayButton.addEventListener('click', event => {
     .then(function (response) {
         // handle success
         console.log(response);
-        cleanHeader.textContent = response.data.clean_count;
-        infectedHeader.textContent = response.data.infected_count;
+        cleanHeader.textContent = 'Clean count: ' + response.data.clean_count;
+        infectedHeader.textContent = 'Infected count: ' + response.data.infected_count;
     })
     .catch(function (error) {
         // handle error
@@ -62,8 +62,8 @@ overviewDateButton.addEventListener('click', event => {
         .then(function (response) {
             // handle success
             console.log(response);
-            cleanHeader.textContent = response.data.clean_count;
-            infectedHeader.textContent = response.data.infected_count;
+            cleanHeader.textContent = 'Clean count: ' + response.data.clean_count;
+            infectedHeader.textContent = 'Infected count: ' + response.data.infected_count;
         })
         .catch(function (error) {
             // handle error
