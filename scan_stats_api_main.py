@@ -14,7 +14,7 @@ mongo_client = AsyncIOMotorClient(os.getenv("MONGO_URL", "mongodb://localhost:27
 db = mongo_client.project_db
 scan_stats_collection = db["scan_statistics"]
 
-
+# gets overview of scans of files for the current date
 @app.get("/overview")
 async def scans_overview():
     date_now = datetime.now().strftime("%Y-%m-%d")
@@ -27,7 +27,7 @@ async def scans_overview():
     # todo insert into redis
     return document
 
-
+# gets overview of scans of files for the selected date
 @app.get("/overview/{date}")
 async def scans_overview_by_date(date: str):
     if date == "":
@@ -40,7 +40,7 @@ async def scans_overview_by_date(date: str):
 
     return document
 
-
+# check if file was already scanned before
 @app.get("/scanned/{file_hash}")
 async def is_scanned(file_hash: str):
     exists = (

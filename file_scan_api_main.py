@@ -84,7 +84,7 @@ async def post_scan(file: bytes = File(...), device_id: str = Body(...)):
 
     return response
 
-
+# gets entire document with requested md5
 @app.get("/scan/{md5}")
 async def get_scan(md5: str):
     """Gets previous scan result from database"""

@@ -27,6 +27,7 @@ def listen_for_scan_messages():
 
     print(" [*] Waiting for scans. To exit press CTRL+C")
 
+    # called for every received message in the rabbit queue
     def callback(ch, method, properties, body):
         scan_body = json.loads(body.decode("utf-8"))
         date_now = datetime.now().strftime("%Y-%m-%d")
