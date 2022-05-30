@@ -12,6 +12,10 @@
                 <label>Scan file:</label>
                 <input type="file" id="file_input" autofocus>
             </div>
+            <div id="md5_input_div">
+                <label>MD5:</label>
+                <input type="text" id="md5_input" >
+            </div>
             <div id="file_text_div">
                 <h2 id="file_text_header"></h2>
             </div>
@@ -27,11 +31,11 @@
         </form>
         <div id="result_wrapper">
             <div id="result_left">
-                <h2>File status...</h2>
+                <h2>File status: </h2>
                 <h2 id="result_header">Clean</h2>
             </div>
             <div id="result_right">
-                <img src="res/clean.png" alt="Clean" width="200" height="150"> 
+                <img src="res/clean.png" alt="Clean" width="200" height="150" id="result_img"> 
             </div>
         </div>
        

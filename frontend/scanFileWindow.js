@@ -1,6 +1,7 @@
 const electron = require('electron');
-const crypto = require('crypto');
 const fs = require('fs');
+const os = require('os');
+const axios = require('axios').default;
 
 // we need ipcRenderer to communicate with main process
 const {ipcRenderer} = electron;
@@ -20,36 +21,78 @@ fileInput.addEventListener('change', event => {
 // get submit button and add event
 const submitButton = document.getElementById('submit_button');
 submitButton.addEventListener('click', event => {
-    let len = fileInput.files.length;
+    let filesLen = fileInput.files.length;
     let fileText = document.getElementById('file_text_header');
+    let md5Input = document.getElementById('md5_input');
+    let md5Len = md5Input.value.length;
+
+    console.log("MD5:");
+    console.log(md5Input.value.length);
 
     console.log('FILE INPUT LENGTH:');
-    console.log(len);
+    console.log(filesLen);
 
-    if (len == 0) {
-        fileText.textContent = 'No file given!';
+    if (filesLen == 0 && md5Len == 0) {
+        fileText.textContent = 'No file and no md5 given!';
+    }
+    else if (filesLen == 0 && md5Len != 0) {
+        let md5 = md5Input.value;
+        console.log(`MD5 IS ${md5}`);
+
+        // make request
+        // axios.get(`/scan/${md5}`)
+        // .then(function (response) {
+        //     // handle success
+        //     console.log(response);
+        // })
+        // .catch(function (error) {
+        //     // handle error
+        //     console.log(error);
+        // })
+        // .then(function () {
+        //     // always executed
+        // });
     }
     else {
         const file = fileInput.files[0];
+
+        let fileBuffer = fs.readFileSync(file.path);
+        let deviceId = os.hostname();
+        console.log("READ FILE:");
+        console.log(fileBuffer);
+        console.log("DEVICE NAME:");
+        console.log(os.hostname());
+
         // update text
         fileText.textContent = `Name: ${file.name}, Type: ${file.type}, Size: ${file.size} bytes`;
 
-        // get file hash
-        const fileBuffer = fs.readFileSync(file.path);
-        const hashSum = crypto.createHash('md5');
-        hashSum.update(fileBuffer);
-        const hex = hashSum.digest('hex');
-
         // make request
         let to_send = {
-            h: hex,
-            ft: file.type,
-            fs: file.size,
+            file: fileBuffer,
+            device_id: deviceId
         }
 
         console.log('Sending: ');
         console.log(to_send);
 
         // make request here
+        // axios.post('/scan', to_send)
+        //   .then(function (response) {
+        //     console.log(response);
+
+        //     // update displayed info
+        //     let result_header = document.getElementById('result_header');
+        //     result_header.textContent = response.verdict;
+
+        //     let result_img = document.getElementById('result_img');
+        //     if (response.verdict == 'clean'){
+        //         result_img.src = "res/clean.png";
+        //     } else {
+        //         result_img.src = "res/infected.png";
+        //     }
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   });
     }
 })

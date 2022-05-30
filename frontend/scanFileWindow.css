@@ -25,6 +25,13 @@ body {
     margin-bottom: 20px;
 }
 
+#md5_input_div {
+    display: flex;
+    justify-content: center;
+    border: 20px;
+    margin-bottom: 20px;
+}
+
 #wrapper_buttons {
     width: 90%;
     /* border: 1px solid black; */
