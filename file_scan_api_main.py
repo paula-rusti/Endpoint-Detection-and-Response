@@ -60,6 +60,7 @@ async def post_scan(file: bytes = File(...), device_id: str = Body(...)):
 
     # else we have to trigger the dummy logic on the current file
     file_sum = sum(hashlib.md5(file).digest())
+    # See what the files status is
     file_verdict = VERDICTS[file_sum % 2]
 
     # and further save result into mongo files_scan_collection
