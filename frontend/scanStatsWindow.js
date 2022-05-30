@@ -1,6 +1,6 @@
 const axios = require('axios').default;
 
-axios.defaults.baseURL = '0.0.0.0';
+axios.defaults.baseURL = 'http://localhost:8005';
 
 // get html elements
 const overviewTodayButton = document.getElementById('overview_today_button');
@@ -29,20 +29,20 @@ overviewTodayButton.addEventListener('click', event => {
     dateHeader.textContent = 'Date: ' + current_date;
 
     // make request
-    // axios.get(`overview`)
-    // .then(function (response) {
-    //     // handle success
-    //     console.log(response);
-    //     cleanHeader.textContent = response.clean_count;
-    //     infectedHeader.textContent = response.infected_count;
-    // })
-    // .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    // })
-    // .then(function () {
-    //     // always executed
-    // });
+    axios.get(`overview`)
+    .then(function (response) {
+        // handle success
+        console.log(response);
+        cleanHeader.textContent = response.clean_count;
+        infectedHeader.textContent = response.infected_count;
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+    })
+    .then(function () {
+        // always executed
+    });
 });
 
 overviewDateButton.addEventListener('click', event => {
@@ -58,20 +58,20 @@ overviewDateButton.addEventListener('click', event => {
         errorTextHeader.textContent = '';
 
         // make request
-        // axios.get(`overview/${date}`)
-        // .then(function (response) {
-        //     // handle success
-        //     console.log(response);
-        //     cleanHeader.textContent = response.clean_count;
-        //     infectedHeader.textContent = response.infected_count;
-        // })
-        // .catch(function (error) {
-        //     // handle error
-        //     console.log(error);
-        // })
-        // .then(function () {
-        //     // always executed
-        // });
+        axios.get(`overview/${date}`)
+        .then(function (response) {
+            // handle success
+            console.log(response);
+            cleanHeader.textContent = response.clean_count;
+            infectedHeader.textContent = response.infected_count;
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
     }
 });
 
@@ -85,24 +85,24 @@ fileOverviewButton.addEventListener('click', event => {
         errorTextHeader.textContent = 'No md5 given!';
     } else {
         // make request
-        //  axios.get(`scanned/${md5}`)
-        // .then(function (response) {
-        //     // handle success
-        //     console.log(response);
+        axios.get(`scanned/${md5}`)
+        .then(function (response) {
+            // handle success
+            console.log(response);
 
-        //     if (response.exists) {
-        //         errorTextHeader.textContent = 'File with md5 ' + md5 + ' was scanned before';
-        //     } else {
-        //         errorTextHeader.textContent = 'File with md5 ' + md5 + ' was not scanned before';
-        //     }
+            if (response.exists) {
+                errorTextHeader.textContent = 'File with md5 ' + md5 + ' was scanned before';
+            } else {
+                errorTextHeader.textContent = 'File with md5 ' + md5 + ' was not scanned before';
+            }
 
-        // })
-        // .catch(function (error) {
-        //     // handle error
-        //     console.log(error);
-        // })
-        // .then(function () {
-        //     // always executed
-        // });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
     }
 })

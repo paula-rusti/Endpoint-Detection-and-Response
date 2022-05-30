@@ -6,7 +6,7 @@ const axios = require('axios').default;
 // we need ipcRenderer to communicate with main process
 const {ipcRenderer} = electron;
 
-axios.defaults.baseURL = '0.0.0.0';
+axios.defaults.baseURL = 'http://localhost:8000';
 
 // get button and send click event to main process
 const cancelButton = document.getElementById('cancel_button');
