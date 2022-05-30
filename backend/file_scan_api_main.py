@@ -5,67 +5,84 @@ import os
 import aioredis as aioredis
 import pika as pika
 import uvicorn
-from fastapi import FastAPI, File, HTTPException, Body
+from fastapi import FastAPI, File, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import DuplicateKeyError
 
-from constants import VERDICTS
-
+# fast api
 app = FastAPI()
-
+# redis
 redis_client = aioredis.from_url(os.getenv("REDIS_URL", "redis://localhost"))
-
-mongo_client = AsyncIOMotorClient(os.getenv("MONGO_URL", "mongodb://localhost:27017"))      # connect to local mongo instance
-db = mongo_client["project_db"]         # 1 single db
-files_scan_collection = db["files_scan_collection"]  # 2 collection, 1 for scan engine and the other for scan stats
-
-scans_exchange_name = "scans"
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=os.getenv("RABBIT_URL", "localhost")))
-channel = connection.channel()
-channel.exchange_declare(exchange=scans_exchange_name, exchange_type="fanout")
+# mongo
+mongo_client = AsyncIOMotorClient(os.getenv("MONGO_URL", "mongodb://localhost:27017"))
+db = mongo_client["project_db"]
+files_scan_collection = db["files_scan_collection"]
 
 
 @app.post("/scan")
-async def post_scan(file: bytes = File(...), device_id: str = Body(...)):
-    # add device_id to request body (maybe the ui will read some device specific info and embed it to the request )
-    """ Scans a malicious file and saves result to database """
+async def post_scan(file: bytes = File(...)):
+    """
+    Scans a malicious file and saves result to database.
+    """
+    # rabbit_mq
+    scans_exchange_name = "scans"
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(
+            host=os.getenv("RABBIT_URL", "localhost"),
+            heartbeat=1200,
+            blocked_connection_timeout=600,
+        )
+    )
+    channel = connection.channel()
+    channel.exchange_declare(exchange=scans_exchange_name, exchange_type="fanout")
+
+    verdicts = ["clean", "infected"]
 
     # compute file hash & sum & verdict
     md5_hash = hashlib.md5(file)
     file_hexdigest = md5_hash.hexdigest()
 
+    # Note:
+    # cache database
+    # daca am fi folosit un database (mongodb) ca si cache am face
+    # find dupa file_hexdigest, dar noi folosim Redis ca si cache ca sa avem diversitate in proiect.
+    # Si in productie se foloseste Redis ca sa nu stresam database-ul.
+    # Ca redisul e foate fast, fiind un fel de hash-map; key-value store.
+    #
+
     # check cache
-    cached_value = await redis_client.get(file_hexdigest)       # redis format: file_hash: {file_hash: value, verdict: value}
+    cached_value = await redis_client.get(file_hexdigest)
     if cached_value:
         print(f"serving {file_hexdigest} from cache")
-        # if the file was previously scanned (thus we were able to answer from cache) => we cand just forward the scan result (mongo doc) to rabbit so it will be further consumed by the worker
+        # forward scan to rabbit
         channel.basic_publish(
             exchange=scans_exchange_name,
             routing_key="",
             body=cached_value,
         )
-        return json.loads(cached_value)     # return the scan result
+        return json.loads(cached_value)
 
-    # else we have to trigger the dummy logic on the current file
+    # compute sum & verdict
     file_sum = sum(hashlib.md5(file).digest())
-    file_verdict = VERDICTS[file_sum % 2]
+    # accesezi array-ul de verdicts si datorita modulo 2 iti iese clean sau infected.
+    file_verdict = verdicts[file_sum % 2]
 
-    # and further save result into mongo files_scan_collection
+    # save result into mongo
     try:
         result = await files_scan_collection.insert_one(
-            {"_id": file_hexdigest, "verdict": file_verdict, "dev_id": device_id}
+            {"_id": file_hexdigest, "verdict": file_verdict}
         )
-        if not result.acknowledged:     # if we were unable to save the data to mongo and data was lost
+        if not result.acknowledged:
             print("failed to save file with hash", file_hexdigest)
             raise HTTPException(status_code=500, detail="Operation failed")
     except DuplicateKeyError as e:
         print(e)
 
-    # and also save result in cache
+    # save result in cache
     response = {"file_hash": file_hexdigest, "verdict": file_verdict}
     await redis_client.set(file_hexdigest, json.dumps(response))
 
-    # and finally forward scan to rabbit
+    # forward scan to rabbit
     channel.basic_publish(
         exchange=scans_exchange_name,
         routing_key="",
@@ -77,10 +94,15 @@ async def post_scan(file: bytes = File(...), device_id: str = Body(...)):
 
 @app.get("/scan/{md5}")
 async def get_scan(md5: str):
-    """ Gets previous scan result from database """
+    """
+    Gets previous scan result from database
+    """
     if not md5 or md5 == "":
         raise HTTPException(status_code=400, detail="Bad md5!")
-    result = await files_scan_collection.find_one({"_id": md5}) # look in mongo instead of redis bcs the keys expire there :( (LRU cache)
+
+    # poti verifica si cache-ul inainte si sa raspunzi din cache daca vrei. dar nu trebuie
+
+    result = await files_scan_collection.find_one({"_id": md5})
     if result is None:
         raise HTTPException(status_code=404, detail="Not found!")
 
@@ -88,4 +110,4 @@ async def get_scan(md5: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8100)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
