@@ -90,7 +90,7 @@ fileOverviewButton.addEventListener('click', event => {
             // handle success
             console.log(response);
 
-            if (response.exists) {
+            if (response.data.exists) {
                 errorTextHeader.textContent = 'File with md5 ' + md5 + ' was scanned before';
             } else {
                 errorTextHeader.textContent = 'File with md5 ' + md5 + ' was not scanned before';
