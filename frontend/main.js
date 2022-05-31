@@ -31,7 +31,7 @@ app.on('ready', function(){
     const mainMenu = Menu.buildFromTemplate([]);
     Menu.setApplicationMenu(mainMenu);
 
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     // stop app when close is pressed
     mainWindow.on('close', () => {
@@ -64,7 +64,7 @@ function createScanFileWindow(){
         scanFileWindow = null;
     })
 
-    scanFileWindow.webContents.openDevTools();
+    //scanFileWindow.webContents.openDevTools();
 
     scanFileWindow.show();
 }
@@ -74,7 +74,7 @@ function createScanStatsWindow(){
     // create window
     scanStatsWindow = new BrowserWindow({
         width: 800,
-        height: 400,
+        height: 500,
         title: 'Scan stats',
         webPreferences: {
             nodeIntegration: true,
@@ -94,7 +94,7 @@ function createScanStatsWindow(){
         scanStatsWindow = null;
     })
 
-    scanStatsWindow.webContents.openDevTools();
+    //scanStatsWindow.webContents.openDevTools();
 
     scanStatsWindow.show();
 }

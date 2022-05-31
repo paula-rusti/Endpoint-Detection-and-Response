@@ -6,7 +6,7 @@ const os = require('os');
 const {ipcRenderer} = electron;
 
 // axios config
-axios.defaults.baseURL = 'http://localhost:8100';
+axios.defaults.baseURL = 'http://167.71.50.215:8100';
 
 // get buttons and send click events to main process
 const scanButton = document.getElementById('scan_file_button');

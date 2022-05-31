@@ -6,7 +6,7 @@ const axios = require('axios').default;
 // we need ipcRenderer to communicate with main process
 const {ipcRenderer} = electron;
 
-axios.defaults.baseURL = 'http://localhost:8100';
+axios.defaults.baseURL = 'http://167.71.50.215:8100';
 axios.defaults.headers.post['Content-Type'] = 'application/octet-stream';
 
 // get button and send click event to main process
@@ -77,7 +77,7 @@ submitButton.addEventListener('click', event => {
 
         const options = {
             method: 'POST',
-            url: 'http://localhost:8100/scan',
+            url: 'http://167.71.50.215:8100/scan',
             headers: {'Content-Type': 'multipart/form-data'},
             data: form
           };
