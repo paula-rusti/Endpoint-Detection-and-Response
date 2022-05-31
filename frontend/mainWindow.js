@@ -5,6 +5,8 @@ const os = require('os');
 // we need ipcRenderer to communicate with main process
 const {ipcRenderer} = electron;
 
+
+//here mainly the buttons will be configured
 // axios config
 axios.defaults.baseURL = 'http://167.71.50.215:8100';
 
@@ -49,6 +51,7 @@ statusButton.addEventListener('click', event => {
 });
 
 // update device info elements
+//the os will everytime be verified
 const platformHeader = document.getElementById('platform_header');
 platformHeader.textContent = 'Platform: ' + os.platform();
 
