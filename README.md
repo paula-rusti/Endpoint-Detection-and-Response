@@ -1,6 +1,5 @@
-# DP-Project-2
-
-## Endpoint Detection and Response
+# Endpoint Detection and Response
+Second project for the Distribute Programming subject, year 3 semester 2.
 
 ### Project Overview
 Our system keeps users protected from potentially malicious files by scanning them using our cloud infrastructure.
